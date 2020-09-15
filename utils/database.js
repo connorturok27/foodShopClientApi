@@ -10,17 +10,6 @@ exports.select = async (query, values) => {
     try {
         const [rows] = await poolPromise.execute(query, values);
         result = rows;
-        result = result.map(value => {
-            const keys = Object.keys(value);
-            const vals = Object.values(value).map(v => {
-                return crypto.decrypt(v).length > 0
-                    ? crypto.decrypt(v)
-                    : v;
-            });
-            return Object.assign(...keys.map(
-                (k, i) =>
-                    ({[k]: vals[i]})))
-        });
     } catch (e) {
         throw new Error(e);
     }
