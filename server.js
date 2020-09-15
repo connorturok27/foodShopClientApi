@@ -4,7 +4,7 @@ const express = require('express');
 
 const app = express();
 
-// const privateRoutes = require('./routes/private.routes');
+const publicRoutes = require('./routes/public.routes');
 
 // Parse json response
 app.use(bodyParser.json());
@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 })
 
 // Serve other pages
-// app.use(privateRoutes.routes);
+app.use('/shop',publicRoutes);
 
 // Serve start page
 app.get('/ping', (req, res, next) => {
