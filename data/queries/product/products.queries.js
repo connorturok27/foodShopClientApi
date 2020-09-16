@@ -9,6 +9,7 @@ exports.selectListWithReferences = () => {
         Product p
         INNER JOIN Food_Type ft
         ON p.fk_product_food_type_id = ft.id
+        LIMIT ?,?
         ;
 `
 };

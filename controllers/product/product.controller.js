@@ -18,7 +18,7 @@ const parseProducts = async (products) => {
                 size: price.size,
                 price: productPrice
             }
-        }) ;
+        });
 
         return {
             id: product.id,
@@ -32,7 +32,8 @@ const parseProducts = async (products) => {
 
 exports.getProducts = async (req, res, next) => {
     try {
-        let products = await Product.fetchAllWithReferences();
+        const {pageSize,page} = req.query;
+        let products = await Product.fetchAllWithReferences(parseInt(pageSize), parseInt(page));
         products = JSON.parse(products);
         products = await parseProducts(products);
         res.status(200).json(products)
