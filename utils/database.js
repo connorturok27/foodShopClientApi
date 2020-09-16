@@ -35,3 +35,8 @@ exports.getLastInsertId = async () => {
         throw new Error(e);
     }
 }
+
+exports.offset = (limit, page) => {
+    const offset = limit * (page - 1)
+    return offset < 0 ? 0 : offset
+}
