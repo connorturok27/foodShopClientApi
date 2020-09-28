@@ -6,7 +6,7 @@ const parseProducts = async (products) => {
         productPrices = JSON.parse(productPrices);
         productPrices = productPrices.map(price => {
             let productPrice;
-            if (price.multiplier === "0") {
+            if (!price.multiplier) {
                 productPrice = product.price
             } else {
                 productPrice = price.multiplier.includes('+') ?
@@ -32,11 +32,20 @@ const parseProducts = async (products) => {
 
 exports.getProducts = async (req, res, next) => {
     try {
-        const {pageSize,page} = req.query;
+        const {pageSize,page, foodType, search} = req.query;
         let products = await Product.fetchAllWithReferences(parseInt(pageSize), parseInt(page));
         products = JSON.parse(products);
         products = await parseProducts(products);
-        res.status(200).json(products)
+
+        if(foodType) {
+            products = products.filter(product => product.foodType === foodType);
+        }
+
+        if(search) {
+            products = products.filter(product => product.name.toLowerCase().includes(search.toLowerCase()))
+        }
+
+        return res.status(200).json(products)
     } catch (e) {
         throw new Error(e)
     }
