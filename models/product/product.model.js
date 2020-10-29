@@ -21,4 +21,8 @@ module.exports = class Product {
     static fetchAllPriceTypesByProductId(id) {
         return db.select(productQuery.selectPriceTypesForProduct(), [id])
     }
+
+    static fetchById(id) {
+        return db.select(productQuery.selectById(), [id]);
+    }
 };

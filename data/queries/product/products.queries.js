@@ -53,9 +53,13 @@ exports.selectPriceTypesForProduct= () => {
 };
 
 exports.selectById = () => {
-    return `Select 
-    id, name, price, fk_product_food_type_id,
-    price_type_id, image_url
-    from Product
-    WHERE id = ?`
+    return `SELECT p.id, p.name, image_url,
+        p.price, ft.name 'foodType' 
+        From 
+        Product p
+        INNER JOIN Food_Type ft
+        ON p.fk_product_food_type_id = ft.id
+        WHERE p.id = ? 
+        ;
+    `
 };

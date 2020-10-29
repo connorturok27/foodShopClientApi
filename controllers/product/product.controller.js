@@ -29,19 +29,20 @@ const parseProducts = async (products) => {
         }
     }))
 }
+const {CODE1} = require('../../constants/errorMessages.js')
 
 exports.getProducts = async (req, res, next) => {
     try {
-        const {pageSize,page, foodType, search} = req.query;
+        const {pageSize, page, foodType, search} = req.query;
         let products = await Product.fetchAllWithReferences(parseInt(pageSize), parseInt(page));
         products = JSON.parse(products);
         products = await parseProducts(products);
 
-        if(foodType) {
+        if (foodType) {
             products = products.filter(product => product.foodType === foodType);
         }
 
-        if(search) {
+        if (search) {
             products = products.filter(product => product.name.toLowerCase().includes(search.toLowerCase()))
         }
 
@@ -50,4 +51,20 @@ exports.getProducts = async (req, res, next) => {
         throw new Error(e)
     }
 
+}
+
+exports.getSingleProduct = async (req, res, next) => {
+    try {
+        const {foodId} = req.params;
+        let food = await Product.fetchById(parseInt(foodId));
+        food = JSON.parse(food);
+        if (food.length < 1) {
+            return res.status(404).json(CODE1('food'))
+        } else {
+            food = await parseProducts(food)
+            return res.status(200).json(food[0])
+        }
+    } catch (e) {
+        throw new Error(e)
+    }
 }
